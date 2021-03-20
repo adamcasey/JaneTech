@@ -36,10 +36,19 @@ class SoccerMatches {
 
 		const matchArray = [];
 
+		const r = /\d+/;
+
 		for await (const line of readInterface) {
-			const teamArray = this.getTeams(line);
-			matchArray.push(teamArray);
-			this.teamArray.push(teamArray);
+			if (line.length) {
+				const teamArray = this.getTeams(line);
+				const firstScore = teamArray[0].match(r);
+				// console.log('first team: ', teamArray[0]);
+				if (firstScore) {
+					console.log('firstScore: ', firstScore[0]);
+					matchArray.push(teamArray);
+					this.teamArray.push(teamArray);
+				}
+			}
 		}
 
 		// readInterface.on('line', (line) => {
