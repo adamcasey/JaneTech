@@ -33,14 +33,28 @@ getWinnerAndScore = (teamArray, regDigit) => {
 };
 
 checkSeenTeam = (teamName, seenTeams) => {
-	return seenTeams[teamName];
+	console.log('teamName: ', teamName);
+	console.log('seenTeams: ', seenTeams);
+	if (seenTeams[teamName]) {
+		console.log('seen this team: ', teamName);
+		return true;
+	}
+	return false;
 };
 
-handleSeenTeam = (teamName, seenTeams, scoreToAdd, seenFlag, teamArray) => {
+getNewSeenTeamsObj = (seenTeams) => {
+	for (const prop of Object.getOwnPropertyNames(seenTeams)) {
+		delete seenTeams[prop];
+	}
+};
+
+handleSeenTeam = (teamName, seenTeams, scoreToAdd, seenNames, teamArray) => {
+	console.log('handling seen team: ', teamArray);
 	teamArray.push(seenTeams);
-	seenTeams = {};
-	seenTeams[teamName] += scoreToAdd;
-	seenFlag = true;
+	getNewSeenTeamsObj(seenTeams);
+	console.log('seenTeams reaassigned: ', seenTeams);
+	seenTeams[teamName] = scoreToAdd;
+	seenNames.push(teamName);
 	return seenTeams;
 };
 

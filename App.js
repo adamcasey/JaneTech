@@ -11,7 +11,7 @@ class SoccerMatches {
 		this.teamArray = [];
 		this.seenTeams = {};
 		this.matchDayNum = 0;
-		this.seenTeamsFlag = false;
+		this.seenTeamsNames = [];
 	}
 
 	get fileToRead() {
@@ -45,31 +45,33 @@ class SoccerMatches {
 										winnerAndScore[0],
 										this.seenTeams,
 										3,
-										this.seenTeamsFlag,
+										this.seenTeamsNames,
 										this.teamArray
 								  )
 								: (this.seenTeams[winnerAndScore[0]] = 3);
 						} else if (winnerAndScore.length === 2) {
-							checkSeenTeam(winnerAndScore[0], this.seenTeams)
+							const sortedTie = winnerAndScore.sort();
+							console.log('sortedTie: ', sortedTie);
+							checkSeenTeam(sortedTie[0], this.seenTeams)
 								? // ? (this.seenTeams[winnerAndScore[0]] += 1)
 								  handleSeenTeam(
-										winnerAndScore[0],
+										sortedTie[0],
 										this.seenTeams,
 										1,
-										this.seenTeamsFlag,
+										this.seenTeamsNames,
 										this.teamArray
 								  )
-								: (this.seenTeams[winnerAndScore[0]] = 1);
-							checkSeenTeam(winnerAndScore[1], this.seenTeams)
-								? // ? (this.seenTeams[winnerAndScore[1]] += 1)
-								  handleSeenTeam(
-										winnerAndScore[1],
-										this.seenTeams,
-										1,
-										this.seenTeamsFlag,
-										this.teamArray
-								  )
-								: (this.seenTeams[winnerAndScore[1]] = 1);
+								: (this.seenTeams[sortedTie[0]] = 1);
+							// checkSeenTeam(winnerAndScore[1], this.seenTeams)
+							// 	? // ? (this.seenTeams[winnerAndScore[1]] += 1)
+							// 	  handleSeenTeam(
+							// 			winnerAndScore[1],
+							// 			this.seenTeams,
+							// 			1,
+							// 			this.seenTeamsNames,
+							// 			this.teamArray
+							// 	  )
+							// 	: (this.seenTeams[winnerAndScore[1]] = 1);
 						} else {
 							console.log('Could not determine winner');
 						}
@@ -93,7 +95,6 @@ soccerMatch.getMatchDay().then((res) => {
 		_.sortBy(_.toPairs(soccerMatch.seenTeams), 1).reverse()
 	);
 	console.log('seenTeams: ', sortedTeams);
-	console.log('teamArray: ', soccerMatch.teamArray);
-	// console.log('res: ', res);
-	// console.log('soccerMatch: ', soccerMatch.teamArray);
+	console.log('teamArray: ', soccerMatch.teamArray.length);
+	console.log('seenNames: ', soccerMatch.seenTeamsNames);
 });
