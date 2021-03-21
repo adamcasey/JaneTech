@@ -33,45 +33,68 @@ class SoccerMatches {
 			for await (const line of readInterface) {
 				try {
 					if (line.length) {
-						const teamArray = soccerHelpers.getTeams(line);
+						const splitTeams = soccerHelpers.getTeams(line);
 						const winnerAndScore = soccerHelpers.getWinnerAndScore(
-							teamArray,
+							splitTeams,
 							this.regDigit
 						);
 						if (winnerAndScore.length === 1) {
 							checkSeenTeam(winnerAndScore[0], this.seenTeams)
-								? // ? (this.seenTeams[winnerAndScore[0]] += 3)
-								  handleSeenTeam(
+								? handleSeenTeam(
 										winnerAndScore[0],
+										soccerHelpers.getTeamName(splitTeams[1]),
 										this.seenTeams,
 										3,
-										this.seenTeamsNames,
 										this.teamArray
 								  )
-								: (this.seenTeams[winnerAndScore[0]] = 3);
+								: handleUnseenTeam(
+										winnerAndScore[0],
+										soccerHelpers.getTeamName(splitTeams[1]),
+										3,
+										this.seenTeams
+								  );
+
+							const teamExistsInArray = this.seenTeamsNames.indexOf(
+								winnerAndScore[0]
+							);
+							teamExistsInArray > -1
+								? null
+								: this.seenTeamsNames.push(winnerAndScore[0]);
 						} else if (winnerAndScore.length === 2) {
 							const sortedTie = winnerAndScore.sort();
 							console.log('sortedTie: ', sortedTie);
 							checkSeenTeam(sortedTie[0], this.seenTeams)
-								? // ? (this.seenTeams[winnerAndScore[0]] += 1)
-								  handleSeenTeam(
+								? handleSeenTeam(
 										sortedTie[0],
+										sortedTie[1],
 										this.seenTeams,
-										1,
-										this.seenTeamsNames,
+										3,
 										this.teamArray
 								  )
-								: (this.seenTeams[sortedTie[0]] = 1);
-							// checkSeenTeam(winnerAndScore[1], this.seenTeams)
+								: handleUnseenTeam(
+										sortedTie[0],
+										sortedTie[1],
+										1,
+										this.seenTeams
+								  );
+							// let teamExistsInArray = this.seenTeamsNames.indexOf(sortedTie[0]);
+							// teamExistsInArray > -1
+							// 	? null
+							// 	: this.seenTeamsNames.push(sortedTie[0]);
+							// checkSeenTeam(sortedTie[1], this.seenTeams)
 							// 	? // ? (this.seenTeams[winnerAndScore[1]] += 1)
 							// 	  handleSeenTeam(
-							// 			winnerAndScore[1],
+							// 			sortedTie[1],
 							// 			this.seenTeams,
 							// 			1,
 							// 			this.seenTeamsNames,
 							// 			this.teamArray
 							// 	  )
-							// 	: (this.seenTeams[winnerAndScore[1]] = 1);
+							// 	: (this.seenTeams[sortedTie[1]] = 1);
+							// teamExistsInArray = this.seenTeamsNames.indexOf(sortedTie[1]);
+							// teamExistsInArray > -1
+							// 	? null
+							// 	: this.seenTeamsNames.push(sortedTie[1]);
 						} else {
 							console.log('Could not determine winner');
 						}
@@ -94,7 +117,7 @@ soccerMatch.getMatchDay().then((res) => {
 	const sortedTeams = _.fromPairs(
 		_.sortBy(_.toPairs(soccerMatch.seenTeams), 1).reverse()
 	);
-	console.log('seenTeams: ', sortedTeams);
-	console.log('teamArray: ', soccerMatch.teamArray.length);
-	console.log('seenNames: ', soccerMatch.seenTeamsNames);
+	// console.log('seenTeams: ', sortedTeams);
+	console.log('teamArray: ', soccerMatch.teamArray);
+	// console.log('seenNames: ', soccerMatch.seenTeamsNames);
 });

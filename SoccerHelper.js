@@ -1,3 +1,5 @@
+const cloneDeeo = require('lodash/cloneDeep');
+
 getScore = (line) => {
 	return parseInt(line);
 };
@@ -33,7 +35,7 @@ getWinnerAndScore = (teamArray, regDigit) => {
 };
 
 checkSeenTeam = (teamName, seenTeams) => {
-	console.log('teamName: ', teamName);
+	console.log('checkSeenTeam teamName: ', teamName);
 	console.log('seenTeams: ', seenTeams);
 	if (seenTeams[teamName]) {
 		console.log('seen this team: ', teamName);
@@ -48,13 +50,37 @@ getNewSeenTeamsObj = (seenTeams) => {
 	}
 };
 
-handleSeenTeam = (teamName, seenTeams, scoreToAdd, seenNames, teamArray) => {
-	console.log('handling seen team: ', teamArray);
-	teamArray.push(seenTeams);
+handleSeenTeam = (
+	winningTeam,
+	losingTeam,
+	seenTeams,
+	scoreToAdd,
+	teamArray
+) => {
+	// console.log('handling seen team: ', teamArray);
+	const prevSeenTeams = cloneDeeo(seenTeams);
+	teamArray.push(prevSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
 	console.log('seenTeams reaassigned: ', seenTeams);
-	seenTeams[teamName] = scoreToAdd;
-	seenNames.push(teamName);
+	if (scoreToAdd === 3) {
+		seenTeams[winningTeam] = 3;
+		seenTeams[losingTeam] = 0;
+	} else if (scoreToAdd === 1) {
+		seenTeams[winningTeam] = 1;
+		seenTeams[losingTeam] = 1;
+	}
+	return seenTeams;
+};
+
+handleUnseenTeam = (winningTeam, losingTeam, scoreToAdd, seenTeams) => {
+	if (scoreToAdd === 3) {
+		seenTeams[winningTeam] = 3;
+		seenTeams[losingTeam] = 0;
+	} else if (scoreToAdd === 1) {
+		seenTeams[winningTeam] = 1;
+		seenTeams[losingTeam] = 1;
+	}
+
 	return seenTeams;
 };
 
@@ -66,4 +92,5 @@ module.exports = {
 	getWinnerAndScore,
 	checkSeenTeam,
 	handleSeenTeam,
+	handleUnseenTeam,
 };
