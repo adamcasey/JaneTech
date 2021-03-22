@@ -45,7 +45,8 @@ getWinnerAndScore = (teamArray, regDigit) => {
 checkSeenTeam = (teamName, seenTeams) => {
 	console.log('checkSeenTeam winning teamName: ', teamName);
 	console.log('seenTeams: ', seenTeams);
-	if (seenTeams[teamName]) {
+	// if (seenTeams[teamName]) {
+	if (seenTeams.hasOwnProperty(teamName)) {
 		console.log('seen this team: ', teamName);
 		return true;
 	}
@@ -65,7 +66,7 @@ handleSeenTeam = (
 	scoreToAdd,
 	teamArray
 ) => {
-	// console.log('handling seen team: ', teamArray);
+	console.log('handling seen team: ', winningTeam);
 	const prevSeenTeams = cloneDeeo(seenTeams);
 	teamArray.push(prevSeenTeams);
 	getNewSeenTeamsObj(seenTeams);

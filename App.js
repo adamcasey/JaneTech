@@ -35,7 +35,7 @@ class SoccerMatches {
 					flag: 'r',
 				})
 				.split('\n');
-			// console.log('data: ', data);
+			console.log('data: ', data);
 			// for (const line of data) {
 			// 	console.log('line: ', line);
 			// }
@@ -77,6 +77,8 @@ class SoccerMatches {
 				}
 				console.log('seenTeams in loop: ', this.seenTeams);
 			}
+			// End of data so push last object to teamArray
+			this.teamArray.push(this.seenTeams);
 
 			return;
 		} catch (err) {
@@ -91,7 +93,7 @@ soccerMatch.getMatchDay().then((res) => {
 	const sortedTeams = _.fromPairs(
 		_.sortBy(_.toPairs(soccerMatch.seenTeams), 1).reverse()
 	);
-	console.log('sorted teams: ', sortedTeams);
+	// console.log('sorted teams: ', sortedTeams);
 	console.log('teamArray: ', soccerMatch.teamArray);
 	console.log('seenNames: ', soccerMatch.seenTeamsNames);
 });
