@@ -1,4 +1,5 @@
-const cloneDeeo = require('lodash/cloneDeep');
+const cloneDeep = require('lodash/cloneDeep');
+const _ = require('lodash');
 
 getScore = (line) => {
 	return parseInt(line);
@@ -67,8 +68,11 @@ handleSeenTeam = (
 	teamArray
 ) => {
 	console.log('handling seen team: ', winningTeam);
-	const prevSeenTeams = cloneDeeo(seenTeams);
-	teamArray.push(prevSeenTeams);
+	const prevSeenTeams = cloneDeep(seenTeams);
+	const sortedSeenTeams = _.fromPairs(
+		_.sortBy(_.toPairs(prevSeenTeams), 1).reverse()
+	);
+	teamArray.push(sortedSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
 	console.log('seenTeams reaassigned: ', seenTeams);
 	if (scoreToAdd === 3) {
