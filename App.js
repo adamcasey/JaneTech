@@ -24,84 +24,58 @@ class SoccerMatches {
 
 	getMatchDay = async () => {
 		try {
-			const readInterface = readline.createInterface({
-				input: fs.createReadStream(this.fileToRead),
-				crlfDelay: Infinity,
-				console: false,
-			});
+			// const readInterface = readline.createInterface({
+			// 	input: fs.createReadStream(this.fileToRead),
+			// 	crlfDelay: Infinity,
+			// 	console: false,
+			// });
+			const data = fs
+				.readFileSync(this.fileToRead, {
+					encoding: 'utf8',
+					flag: 'r',
+				})
+				.split('\n');
+			// console.log('data: ', data);
+			// for (const line of data) {
+			// 	console.log('line: ', line);
+			// }
+			// return;
 
-			for await (const line of readInterface) {
+			// for await (const line of data) {
+			for (const line of data) {
 				try {
 					if (line.length) {
 						const splitTeams = soccerHelpers.getTeams(line);
-						const winnerAndScore = soccerHelpers.getWinnerAndScore(
-							splitTeams,
-							this.regDigit
-						);
-						if (winnerAndScore.length === 1) {
-							checkSeenTeam(winnerAndScore[0], this.seenTeams)
-								? handleSeenTeam(
-										winnerAndScore[0],
-										soccerHelpers.getTeamName(splitTeams[1]),
-										this.seenTeams,
-										3,
-										this.teamArray
-								  )
-								: handleUnseenTeam(
-										winnerAndScore[0],
-										soccerHelpers.getTeamName(splitTeams[1]),
-										3,
-										this.seenTeams
-								  );
+						const {
+							winningTeam,
+							losingTeam,
+							tie,
+						} = soccerHelpers.getWinnerAndScore(splitTeams, this.regDigit);
 
-							const teamExistsInArray = this.seenTeamsNames.indexOf(
-								winnerAndScore[0]
-							);
-							teamExistsInArray > -1
-								? null
-								: this.seenTeamsNames.push(winnerAndScore[0]);
-						} else if (winnerAndScore.length === 2) {
-							const sortedTie = winnerAndScore.sort();
-							console.log('sortedTie: ', sortedTie);
-							checkSeenTeam(sortedTie[0], this.seenTeams)
-								? handleSeenTeam(
-										sortedTie[0],
-										sortedTie[1],
-										this.seenTeams,
-										3,
-										this.teamArray
-								  )
-								: handleUnseenTeam(
-										sortedTie[0],
-										sortedTie[1],
-										1,
-										this.seenTeams
-								  );
-							// let teamExistsInArray = this.seenTeamsNames.indexOf(sortedTie[0]);
-							// teamExistsInArray > -1
-							// 	? null
-							// 	: this.seenTeamsNames.push(sortedTie[0]);
-							// checkSeenTeam(sortedTie[1], this.seenTeams)
-							// 	? // ? (this.seenTeams[winnerAndScore[1]] += 1)
-							// 	  handleSeenTeam(
-							// 			sortedTie[1],
-							// 			this.seenTeams,
-							// 			1,
-							// 			this.seenTeamsNames,
-							// 			this.teamArray
-							// 	  )
-							// 	: (this.seenTeams[sortedTie[1]] = 1);
-							// teamExistsInArray = this.seenTeamsNames.indexOf(sortedTie[1]);
-							// teamExistsInArray > -1
-							// 	? null
-							// 	: this.seenTeamsNames.push(sortedTie[1]);
-						} else {
-							console.log('Could not determine winner');
-						}
+						checkSeenTeam(winningTeam, this.seenTeams)
+							? handleSeenTeam(
+									winningTeam,
+									losingTeam,
+									this.seenTeams,
+									tie ? 1 : 3,
+									this.teamArray
+							  )
+							: handleUnseenTeam(
+									winningTeam,
+									losingTeam,
+									tie ? 1 : 3,
+									this.seenTeams
+							  );
+
+						const teamExistsInArray = this.seenTeamsNames.indexOf(winningTeam);
+						teamExistsInArray > -1
+							? null
+							: this.seenTeamsNames.push(winningTeam);
 					}
 				} catch (error) {
 					console.log('Error getting winner: ', error);
 				}
+				console.log('seenTeams in loop: ', this.seenTeams);
 			}
 
 			return;
@@ -117,7 +91,7 @@ soccerMatch.getMatchDay().then((res) => {
 	const sortedTeams = _.fromPairs(
 		_.sortBy(_.toPairs(soccerMatch.seenTeams), 1).reverse()
 	);
-	// console.log('seenTeams: ', sortedTeams);
+	console.log('sorted teams: ', sortedTeams);
 	console.log('teamArray: ', soccerMatch.teamArray);
-	// console.log('seenNames: ', soccerMatch.seenTeamsNames);
+	console.log('seenNames: ', soccerMatch.seenTeamsNames);
 });

@@ -17,25 +17,33 @@ getWinnerAndScore = (teamArray, regDigit) => {
 	const secondScoreArray = teamArray[1].match(regDigit);
 	const firstScoreNum = parseInt(firstScoreArray[0]);
 	const secondScoreNum = parseInt(secondScoreArray[0]);
-	let teamName = '';
+	let winningTeam = '';
+	let losingTeam = '';
+
 	if (firstScoreNum > secondScoreNum) {
-		teamName = getTeamName(teamArray[0]);
-		return [teamName];
+		winningTeam = getTeamName(teamArray[0]);
+		losingTeam = getTeamName(teamArray[1]);
+		return { winningTeam: winningTeam, losingTeam: losingTeam, tie: false };
 	}
 	if (secondScoreNum > firstScoreNum) {
-		teamName = getTeamName(teamArray[1]);
-		return [teamName];
+		winningTeam = getTeamName(teamArray[1]);
+		losingTeam = getTeamName(teamArray[0]);
+		return { winningTeam: winningTeam, losingTeam: losingTeam, tie: false };
 	}
 	if (firstScoreNum === secondScoreNum) {
 		const firstTeamName = getTeamName(teamArray[0]);
 		const secondTeamName = getTeamName(teamArray[1]);
 
-		return [firstTeamName, secondTeamName];
+		return {
+			winningTeam: firstTeamName,
+			losingTeam: secondTeamName,
+			tie: true,
+		};
 	}
 };
 
 checkSeenTeam = (teamName, seenTeams) => {
-	console.log('checkSeenTeam teamName: ', teamName);
+	console.log('checkSeenTeam winning teamName: ', teamName);
 	console.log('seenTeams: ', seenTeams);
 	if (seenTeams[teamName]) {
 		console.log('seen this team: ', teamName);
