@@ -89,7 +89,7 @@ getPreviousScores = (seenClone, teamArray) => {
 
 	return teamArray[teamArray.length - 1].forEach((prevTeam) => {
 		// const currentScore = seenClone[prevTeam.teamName];
-		seenClone[prevTeam.teamName] += prevTeam.teamScore;
+		seenClone[prevTeam[0]] += prevTeam[1];
 	});
 };
 
@@ -104,7 +104,7 @@ handleSeenTeam = (
 
 	const seenTeamsClone = cloneDeep(seenTeams);
 
-	// getPreviousScores(seenTeamsClone, teamArray);
+	getPreviousScores(seenTeamsClone, teamArray);
 	
 	const sortedSeenTeams = getSortedTeamObj(seenTeamsClone);
 	teamArray.push(sortedSeenTeams);
