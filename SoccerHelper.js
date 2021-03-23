@@ -43,12 +43,16 @@ getWinnerAndScore = (teamArray, regDigit) => {
 	}
 };
 
+newCheckSeenTeam = (winningTeam, seenTeamsNames) => {
+	return seenTeamsNames.indexOf(winningTeam) > -1
+}
+
 checkSeenTeam = (teamName, seenTeams) => {
-	console.log('checkSeenTeam winning teamName: ', teamName);
-	console.log('seenTeams: ', seenTeams);
+	// console.log('checkSeenTeam winning teamName: ', teamName);
+	// console.log('seenTeams: ', seenTeams);
 	// if (seenTeams[teamName]) {
 	if (seenTeams.hasOwnProperty(teamName)) {
-		console.log('seen this team: ', teamName);
+		// console.log('seen this team: ', teamName);
 		return true;
 	}
 	return false;
@@ -60,21 +64,57 @@ getNewSeenTeamsObj = (seenTeams) => {
 	}
 };
 
+getSortedTeamObj = (teamObj) => {
+
+	const tempTeamObj = Object.entries(teamObj).map(eachTeam => {
+		// console.log('eachTeam: ', eachTeam);
+		return {
+			teamName: eachTeam[0],
+			teamScore: eachTeam[1]
+		}
+	})
+
+	return tempTeamObj.sort(function (vote1, vote2) {
+
+	// Sort by votes
+	// If the first item has a higher number, move it down
+	// If the first item has a lower number, move it up
+	if (vote1.teamScore > vote2.teamScore) return -1;
+	if (vote1.teamScore < vote2.teamScore) return 1;
+
+	// If the votes number is the same between both items, sort alphabetically
+	// If the first item comes first in the alphabet, move it up
+	// Otherwise move it down
+	if (vote1.teamName > vote2.teamName) return 1;
+	if (vote1.teamName < vote2.teamName) return -1;
+
+});
+	// const temp = _(tempTeamObj).chain().sortBy(function(team){
+	// 	return team.teamScore;
+	// }).sortBy(function(team){
+	// 	return team.teamName;
+	// }).value();
+	// console.log('temp: ', temp);
+	// console.log('tempTeamObj: ', tempTeamObj);
+	// return _.fromPairs(_.sortBy(_.toPairs(teamObj), 1).reverse());
+	// return _.sortBy(tempTeamObj, ['teamScore', 'teamName']).reverse();
+};
+
 handleSeenTeam = (
 	winningTeam,
 	losingTeam,
 	seenTeams,
 	scoreToAdd,
-	teamArray
+	teamArray,
+	seenTeamNames
 ) => {
-	console.log('handling seen team: ', winningTeam);
+	// console.log('handling seen team: ', winningTeam);
 	const prevSeenTeams = cloneDeep(seenTeams);
-	const sortedSeenTeams = _.fromPairs(
-		_.sortBy(_.toPairs(prevSeenTeams), 1).reverse()
-	);
+	const sortedSeenTeams = getSortedTeamObj(prevSeenTeams)
 	teamArray.push(sortedSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
-	console.log('seenTeams reaassigned: ', seenTeams);
+	seenTeamNames = [];
+	// console.log('seenTeams reaassigned: ', seenTeams);
 	if (scoreToAdd === 3) {
 		seenTeams[winningTeam] = 3;
 		seenTeams[losingTeam] = 0;
@@ -104,6 +144,8 @@ module.exports = {
 	getTeamName,
 	getWinnerAndScore,
 	checkSeenTeam,
+	newCheckSeenTeam,
 	handleSeenTeam,
 	handleUnseenTeam,
+	getSortedTeamObj
 };

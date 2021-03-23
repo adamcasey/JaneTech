@@ -3,7 +3,6 @@ const fs = require('fs');
 const readline = require('readline');
 const soccerHelpers = require('./SoccerHelper');
 // TODO: Only import lodash methods you use
-const _ = require('lodash');
 
 class SoccerMatches {
 	constructor(file) {
@@ -24,24 +23,13 @@ class SoccerMatches {
 
 	getMatchDay = async () => {
 		try {
-			// const readInterface = readline.createInterface({
-			// 	input: fs.createReadStream(this.fileToRead),
-			// 	crlfDelay: Infinity,
-			// 	console: false,
-			// });
 			const data = fs
 				.readFileSync(this.fileToRead, {
 					encoding: 'utf8',
 					flag: 'r',
 				})
 				.split('\n');
-			console.log('data: ', data);
-			// for (const line of data) {
-			// 	console.log('line: ', line);
-			// }
-			// return;
 
-			// for await (const line of data) {
 			for (const line of data) {
 				try {
 					if (line.length) {
@@ -51,14 +39,19 @@ class SoccerMatches {
 							losingTeam,
 							tie,
 						} = soccerHelpers.getWinnerAndScore(splitTeams, this.regDigit);
+						// console.log('seenTeamNamess beginning of loop: ', this.seenTeamsNames);
+						// console.log('new checkSeenTeam: ', soccerHelpers.newCheckSeenTeam(winningTeam, this.seenTeamsNames));
+						// console.log('seenTeams beginning of loop: ', this.seenTeams);
+						// console.log('old checkSeenTeam: ', soccerHelpers.checkSeenTeam(winningTeam, this.seenTeams));
 
-						checkSeenTeam(winningTeam, this.seenTeams)
+						soccerHelpers.checkSeenTeam(winningTeam, this.seenTeams)
 							? handleSeenTeam(
 									winningTeam,
 									losingTeam,
 									this.seenTeams,
 									tie ? 1 : 3,
-									this.teamArray
+									this.teamArray,
+									this.seenTeamsNames
 							  )
 							: handleUnseenTeam(
 									winningTeam,
@@ -67,18 +60,28 @@ class SoccerMatches {
 									this.seenTeams
 							  );
 
-						const teamExistsInArray = this.seenTeamsNames.indexOf(winningTeam);
-						teamExistsInArray > -1
-							? null
-							: this.seenTeamsNames.push(winningTeam);
+						// const winningTeamExistsInArray = this.seenTeamsNames.indexOf(
+						// 	winningTeam
+						// );
+						// winningTeamExistsInArray > -1
+						// 	? null
+						// 	: this.seenTeamsNames.push(winningTeam);
+
+						// const losingTeamExistsInArray = this.seenTeamsNames.indexOf(
+						// 	losingTeam
+						// );
+						// losingTeamExistsInArray > -1
+						// 	? null
+						// 	: this.seenTeamsNames.push(losingTeam);
 					}
+					// console.log('seenTeams in loop: ', this.seenTeams);
 				} catch (error) {
 					console.log('Error getting winner: ', error);
 				}
-				console.log('seenTeams in loop: ', this.seenTeams);
 			}
 			// End of data so push last object to teamArray
-			this.teamArray.push(this.seenTeams);
+			const sortedFinalTeam = getSortedTeamObj(this.seenTeams)
+			this.teamArray.push(sortedFinalTeam);
 
 			return;
 		} catch (err) {
@@ -90,10 +93,7 @@ class SoccerMatches {
 const soccerMatch = new SoccerMatches(process.argv[2]);
 // console.log(soccerMatch.readFile());
 soccerMatch.getMatchDay().then((res) => {
-	const sortedTeams = _.fromPairs(
-		_.sortBy(_.toPairs(soccerMatch.seenTeams), 1).reverse()
-	);
 	// console.log('sorted teams: ', sortedTeams);
 	console.log('teamArray: ', soccerMatch.teamArray);
-	console.log('seenNames: ', soccerMatch.seenTeamsNames);
+	// console.log('seenNames: ', soccerMatch.seenTeamsNames);
 });
