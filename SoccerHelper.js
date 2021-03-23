@@ -60,18 +60,14 @@ getNewSeenTeamsObj = (seenTeams) => {
 };
 
 getSortedTeamObj = (teamObj) => {
-	const tempTeamObj = Object.entries(teamObj).map((eachTeam) => {
-		// return {
-		// 	teamName: eachTeam[0],
-		// 	teamScore: eachTeam[1],
-		// };
+	const tempTeamArray = Object.entries(teamObj).map((eachTeam) => {
 				return [
 			eachTeam[0],
 			eachTeam[1],
 				];
 	});
 
-	return tempTeamObj.sort(function (vote1, vote2) {
+	return tempTeamArray.sort(function (vote1, vote2) {
 		// Sort by score
 		if (vote1[1] > vote2[1]) return -1;
 		if (vote1[1] < vote2[1]) return 1;
@@ -88,7 +84,6 @@ getPreviousScores = (seenClone, teamArray) => {
 	if (teamArray.length < 1) return seenClone;
 
 	return teamArray[teamArray.length - 1].forEach((prevTeam) => {
-		// const currentScore = seenClone[prevTeam.teamName];
 		seenClone[prevTeam[0]] += prevTeam[1];
 	});
 };

@@ -89,14 +89,21 @@ class SoccerMatches {
 	writeMatchDay = () => {
 		const stream = fs.createWriteStream('Matchdays.txt', { flags: 'a' });
 
-		const numTeamsToShow = getNumTeamsToShow(this.teamArray)
-
+		const numTeamsToShow = getNumTeamsToShow(this.teamArray);
 		let formattedTeamObj = null;
 
+		let topTeamsIndex = 0;
+		// for (let i = 0; i <= this.teamArray.length; i++) {
+		// 	formattedTeamObj.push(this.teamArray[i])
+		// }
+
 		this.teamArray.forEach((eachMatchObj, index) => {
-		// formattedTeamObj = getFormattedTeamObj(this.teamArray[index];)
+			// formattedTeamObj = getFormattedTeamObj(this.teamArray[index];)
 			stream.write(
-				`Matchday ${index + 1}` + '\n' + `${JSON.stringify(eachMatchObj)}` + '\n\n'
+				`Matchday ${index + 1}` +
+					'\n' +
+					`${JSON.stringify(eachMatchObj.slice(0, numTeamsToShow + 1))}` +
+					'\n\n'
 			);
 		});
 

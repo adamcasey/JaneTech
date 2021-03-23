@@ -1,12 +1,12 @@
 Matchday 1
-[["Capitola Seahorses",3],["Felton Lumberjacks",3],["San Jose Earthquakes",1],["Santa Cruz Slugs",1],["Aptos FC",0],["Monterey United",0]]
+[["Capitola Seahorses",3],["Felton Lumberjacks",3],["San Jose Earthquakes",1]]
 
 Matchday 2
-[["Capitola Seahorses",4],["Aptos FC",3],["Felton Lumberjacks",3],["Monterey United",3],["Santa Cruz Slugs",2],["San Jose Earthquakes",1]]
+[["Capitola Seahorses",4],["Aptos FC",3],["Felton Lumberjacks",3]]
 
 Matchday 3
-[["Aptos FC",6],["Felton Lumberjacks",6],["Monterey United",6],["Capitola Seahorses",4],["Santa Cruz Slugs",2],["San Jose Earthquakes",1]]
+[["Aptos FC",6],["Felton Lumberjacks",6],["Monterey United",6]]
 
 Matchday 4
-[["Aptos FC",9],["Felton Lumberjacks",7],["Monterey United",6],["Capitola Seahorses",5],["Santa Cruz Slugs",3],["San Jose Earthquakes",2]]
+[["Aptos FC",9],["Felton Lumberjacks",7],["Monterey United",6]]
 
