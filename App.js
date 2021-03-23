@@ -89,6 +89,8 @@ class SoccerMatches {
 	writeMatchDay = () => {
 		const stream = fs.createWriteStream('Matchdays.txt', { flags: 'a' });
 
+		const numTeamsToShow = getNumTeamsToShow(this.teamArray)
+
 		let formattedTeamObj = null;
 
 		this.teamArray.forEach((eachMatchObj, index) => {

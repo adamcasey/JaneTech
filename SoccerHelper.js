@@ -12,6 +12,10 @@ getTeamName = (team) => {
 	return team.replace(/\d+/g, '').trim();
 };
 
+getNumTeamsToShow = (teamArray) => {
+	return teamArray.length / 2
+}
+
 getWinnerAndScore = (teamArray, regDigit) => {
 	const firstScoreArray = teamArray[0].match(regDigit);
 	const secondScoreArray = teamArray[1].match(regDigit);
@@ -57,20 +61,24 @@ getNewSeenTeamsObj = (seenTeams) => {
 
 getSortedTeamObj = (teamObj) => {
 	const tempTeamObj = Object.entries(teamObj).map((eachTeam) => {
-		return {
-			teamName: eachTeam[0],
-			teamScore: eachTeam[1],
-		};
+		// return {
+		// 	teamName: eachTeam[0],
+		// 	teamScore: eachTeam[1],
+		// };
+				return [
+			eachTeam[0],
+			eachTeam[1],
+				];
 	});
 
 	return tempTeamObj.sort(function (vote1, vote2) {
 		// Sort by score
-		if (vote1.teamScore > vote2.teamScore) return -1;
-		if (vote1.teamScore < vote2.teamScore) return 1;
+		if (vote1[1] > vote2[1]) return -1;
+		if (vote1[1] < vote2[1]) return 1;
 
 		// If the score is the same between both teams, sort alphabetically
-		if (vote1.teamName > vote2.teamName) return 1;
-		if (vote1.teamName < vote2.teamName) return -1;
+		if (vote1[0] > vote2[0]) return 1;
+		if (vote1[0] < vote2[0]) return -1;
 	});
 };
 
@@ -96,7 +104,7 @@ handleSeenTeam = (
 
 	const seenTeamsClone = cloneDeep(seenTeams);
 
-	getPreviousScores(seenTeamsClone, teamArray);
+	// getPreviousScores(seenTeamsClone, teamArray);
 	
 	const sortedSeenTeams = getSortedTeamObj(seenTeamsClone);
 	teamArray.push(sortedSeenTeams);
@@ -134,5 +142,6 @@ module.exports = {
 	handleSeenTeam,
 	handleUnseenTeam,
 	getSortedTeamObj,
-	getPreviousScores
+	getPreviousScores,
+	getNumTeamsToShow
 };
