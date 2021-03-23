@@ -60,19 +60,19 @@ class SoccerMatches {
 									this.seenTeams
 							  );
 
-						// const winningTeamExistsInArray = this.seenTeamsNames.indexOf(
-						// 	winningTeam
-						// );
-						// winningTeamExistsInArray > -1
-						// 	? null
-						// 	: this.seenTeamsNames.push(winningTeam);
+						const winningTeamExistsInArray = this.seenTeamsNames.indexOf(
+							winningTeam
+						);
+						winningTeamExistsInArray > -1
+							? null
+							: this.seenTeamsNames.push(winningTeam);
 
-						// const losingTeamExistsInArray = this.seenTeamsNames.indexOf(
-						// 	losingTeam
-						// );
-						// losingTeamExistsInArray > -1
-						// 	? null
-						// 	: this.seenTeamsNames.push(losingTeam);
+						const losingTeamExistsInArray = this.seenTeamsNames.indexOf(
+							losingTeam
+						);
+						losingTeamExistsInArray > -1
+							? null
+							: this.seenTeamsNames.push(losingTeam);
 					}
 					// console.log('seenTeams in loop: ', this.seenTeams);
 				} catch (error) {
@@ -80,7 +80,9 @@ class SoccerMatches {
 				}
 			}
 			// End of data so push last object to teamArray
-			const sortedFinalTeam = getSortedTeamObj(this.seenTeams)
+			// Need to get previous scores for final team
+			getPreviousScores(this.seenTeams, this.teamArray)
+			const sortedFinalTeam = getSortedTeamObj(this.seenTeams);
 			this.teamArray.push(sortedFinalTeam);
 
 			return;
@@ -93,7 +95,7 @@ class SoccerMatches {
 const soccerMatch = new SoccerMatches(process.argv[2]);
 // console.log(soccerMatch.readFile());
 soccerMatch.getMatchDay().then((res) => {
-	// console.log('sorted teams: ', sortedTeams);
 	console.log('teamArray: ', soccerMatch.teamArray);
-	// console.log('seenNames: ', soccerMatch.seenTeamsNames);
+	console.log('total matches: ', soccerMatch.teamArray.length);
+	console.log('seenNames: ', soccerMatch.seenTeamsNames);
 });

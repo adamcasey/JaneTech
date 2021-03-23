@@ -44,8 +44,8 @@ getWinnerAndScore = (teamArray, regDigit) => {
 };
 
 newCheckSeenTeam = (winningTeam, seenTeamsNames) => {
-	return seenTeamsNames.indexOf(winningTeam) > -1
-}
+	return seenTeamsNames.indexOf(winningTeam) > -1;
+};
 
 checkSeenTeam = (teamName, seenTeams) => {
 	// console.log('checkSeenTeam winning teamName: ', teamName);
@@ -65,39 +65,33 @@ getNewSeenTeamsObj = (seenTeams) => {
 };
 
 getSortedTeamObj = (teamObj) => {
-
-	const tempTeamObj = Object.entries(teamObj).map(eachTeam => {
-		// console.log('eachTeam: ', eachTeam);
+	const tempTeamObj = Object.entries(teamObj).map((eachTeam) => {
 		return {
 			teamName: eachTeam[0],
-			teamScore: eachTeam[1]
-		}
-	})
+			teamScore: eachTeam[1],
+		};
+	});
 
 	return tempTeamObj.sort(function (vote1, vote2) {
+		// Sort by score
+		if (vote1.teamScore > vote2.teamScore) return -1;
+		if (vote1.teamScore < vote2.teamScore) return 1;
 
-	// Sort by votes
-	// If the first item has a higher number, move it down
-	// If the first item has a lower number, move it up
-	if (vote1.teamScore > vote2.teamScore) return -1;
-	if (vote1.teamScore < vote2.teamScore) return 1;
+		// If the score is the same between both teams, sort alphabetically
+		if (vote1.teamName > vote2.teamName) return 1;
+		if (vote1.teamName < vote2.teamName) return -1;
+	});
+};
 
-	// If the votes number is the same between both items, sort alphabetically
-	// If the first item comes first in the alphabet, move it up
-	// Otherwise move it down
-	if (vote1.teamName > vote2.teamName) return 1;
-	if (vote1.teamName < vote2.teamName) return -1;
-
-});
-	// const temp = _(tempTeamObj).chain().sortBy(function(team){
-	// 	return team.teamScore;
-	// }).sortBy(function(team){
-	// 	return team.teamName;
-	// }).value();
-	// console.log('temp: ', temp);
-	// console.log('tempTeamObj: ', tempTeamObj);
-	// return _.fromPairs(_.sortBy(_.toPairs(teamObj), 1).reverse());
-	// return _.sortBy(tempTeamObj, ['teamScore', 'teamName']).reverse();
+getPreviousScores = (seenClone, teamArray) => {
+	console.log('teamArray: ', teamArray);
+	if (teamArray.length < 1) return seenClone;
+	console.log('seenClone: ', seenClone);
+	teamArray[teamArray.length - 1].forEach((prevTeam) => {
+		console.log('prevTeam: ', prevTeam);
+		const currentScore = seenClone[prevTeam.teamName];
+		seenClone[prevTeam.teamName] = currentScore + prevTeam.teamScore;
+	});
 };
 
 handleSeenTeam = (
@@ -109,8 +103,10 @@ handleSeenTeam = (
 	seenTeamNames
 ) => {
 	// console.log('handling seen team: ', winningTeam);
-	const prevSeenTeams = cloneDeep(seenTeams);
-	const sortedSeenTeams = getSortedTeamObj(prevSeenTeams)
+	const seenTeamsClone = cloneDeep(seenTeams);
+	const prevSeenTeams = getPreviousScores(seenTeamsClone, teamArray);
+	// const sortedSeenTeams = getSortedTeamObj(prevSeenTeams);
+	const sortedSeenTeams = getSortedTeamObj(seenTeamsClone);
 	teamArray.push(sortedSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
 	seenTeamNames = [];
@@ -147,5 +143,6 @@ module.exports = {
 	newCheckSeenTeam,
 	handleSeenTeam,
 	handleUnseenTeam,
-	getSortedTeamObj
+	getSortedTeamObj,
+	getPreviousScores
 };
