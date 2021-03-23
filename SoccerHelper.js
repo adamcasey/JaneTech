@@ -1,5 +1,4 @@
 const cloneDeep = require('lodash/cloneDeep');
-const flatten = require('lodash/flatten');
 
 getScore = (line) => {
 	return parseInt(line);
@@ -92,7 +91,6 @@ handleSeenTeam = (
 	seenTeams,
 	scoreToAdd,
 	teamArray,
-	seenTeamNames
 ) => {
 	const seenTeamsClone = cloneDeep(seenTeams);
 
@@ -101,7 +99,6 @@ handleSeenTeam = (
 	const sortedSeenTeams = getSortedTeamObj(seenTeamsClone);
 	teamArray.push(sortedSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
-	seenTeamNames = [];
 
 	if (scoreToAdd === 3) {
 		seenTeams[winningTeam] = 3;
