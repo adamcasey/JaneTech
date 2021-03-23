@@ -1,4 +1,5 @@
 const cloneDeep = require('lodash/cloneDeep');
+const flatten = require('lodash/flatten');
 
 getScore = (line) => {
 	return parseInt(line);
@@ -13,8 +14,8 @@ getTeamName = (team) => {
 };
 
 getNumTeamsToShow = (teamArray) => {
-	return teamArray.length / 2
-}
+	return teamArray.length / 2;
+};
 
 getWinnerAndScore = (teamArray, regDigit) => {
 	const firstScoreArray = teamArray[0].match(regDigit);
@@ -61,10 +62,7 @@ getNewSeenTeamsObj = (seenTeams) => {
 
 getSortedTeamObj = (teamObj) => {
 	const tempTeamArray = Object.entries(teamObj).map((eachTeam) => {
-				return [
-			eachTeam[0],
-			eachTeam[1],
-				];
+		return [eachTeam[0], eachTeam[1]];
 	});
 
 	return tempTeamArray.sort(function (vote1, vote2) {
@@ -96,16 +94,15 @@ handleSeenTeam = (
 	teamArray,
 	seenTeamNames
 ) => {
-
 	const seenTeamsClone = cloneDeep(seenTeams);
 
 	getPreviousScores(seenTeamsClone, teamArray);
-	
+
 	const sortedSeenTeams = getSortedTeamObj(seenTeamsClone);
 	teamArray.push(sortedSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
 	seenTeamNames = [];
-	
+
 	if (scoreToAdd === 3) {
 		seenTeams[winningTeam] = 3;
 		seenTeams[losingTeam] = 0;
@@ -128,6 +125,22 @@ handleUnseenTeam = (winningTeam, losingTeam, scoreToAdd, seenTeams) => {
 	return seenTeams;
 };
 
+/*
+teamSubArray:  [
+  [ 'Aptos FC', 6 ],
+  [ 'Felton Lumberjacks', 6 ],
+  [ 'Monterey United', 6 ]
+]
+*/
+getFormattedTeamObj = (teamSubArray) => {
+	
+	const formattedTeams = teamSubArray.map(eachTeamArray => {
+		return `${eachTeamArray[0]}, ${eachTeamArray[1]} pts `;
+	})
+
+	return formattedTeams
+};
+
 module.exports = {
 	getScore,
 	getTeams,
@@ -138,5 +151,6 @@ module.exports = {
 	handleUnseenTeam,
 	getSortedTeamObj,
 	getPreviousScores,
-	getNumTeamsToShow
+	getNumTeamsToShow,
+	getFormattedTeamObj,
 };

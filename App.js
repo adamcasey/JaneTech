@@ -5,8 +5,9 @@ const soccerHelpers = require('./SoccerHelper');
 // TODO: Only import lodash methods you use
 
 class SoccerMatches {
-	constructor(file) {
-		this.inputFile = file;
+	constructor(inputFile, outputFile) {
+		this.inputFile = inputFile;
+		this.outputFile = outputFile
 		this.teamArray = [];
 		this.seenTeams = {};
 		this.matchDayNum = 0;
@@ -87,24 +88,20 @@ class SoccerMatches {
 	};
 
 	writeMatchDay = () => {
-		const stream = fs.createWriteStream('Matchdays.txt', { flags: 'a' });
+		// const stream = fs.createWriteStream('Matchdays.txt', { flags: 'a' });
+		const stream = fs.createWriteStream(this.outputFile, { flags: 'a' });
 
 		const numTeamsToShow = getNumTeamsToShow(this.teamArray);
-		let formattedTeamObj = null;
-
-		let topTeamsIndex = 0;
-		// for (let i = 0; i <= this.teamArray.length; i++) {
-		// 	formattedTeamObj.push(this.teamArray[i])
-		// }
 
 		this.teamArray.forEach((eachMatchObj, index) => {
-			// formattedTeamObj = getFormattedTeamObj(this.teamArray[index];)
-			stream.write(
-				`Matchday ${index + 1}` +
-					'\n' +
-					`${JSON.stringify(eachMatchObj.slice(0, numTeamsToShow + 1))}` +
-					'\n\n'
-			);
+			const teamSubArray = eachMatchObj.slice(0, numTeamsToShow + 1);
+			const formattedTeamObj = getFormattedTeamObj(teamSubArray);
+
+			stream.write(`Matchday ${index + 1}` + '\n');
+			formattedTeamObj.forEach((eachTeam) => {
+				stream.write(`${eachTeam}` + '\n');
+			});
+			stream.write('\n');
 		});
 
 		console.log('done writing to file');
@@ -112,13 +109,13 @@ class SoccerMatches {
 	};
 }
 
-const soccerMatch = new SoccerMatches(process.argv[2]);
+const soccerMatch = new SoccerMatches(process.argv[2], process.argv[3]);
 soccerMatch
 	.getMatchDay()
 	.then((res) => {
-		console.log('teamArray: ', soccerMatch.teamArray);
-		console.log('total matches: ', soccerMatch.teamArray.length);
-		console.log('seenNames: ', soccerMatch.seenTeamsNames);
+		// console.log('teamArray: ', soccerMatch.teamArray);
+		// console.log('total matches: ', soccerMatch.teamArray.length);
+		// console.log('seenNames: ', soccerMatch.seenTeamsNames);
 		soccerMatch.writeMatchDay();
 	})
 	.catch((error) => console.log('error: ', error));
