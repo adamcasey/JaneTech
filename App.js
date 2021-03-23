@@ -85,6 +85,22 @@ class SoccerMatches {
 			console.log('readfile error: ', error);
 		}
 	};
+
+	writeMatchDay = () => {
+		const stream = fs.createWriteStream('Matchdays.txt', { flags: 'a' });
+
+		let formattedTeamObj = null;
+
+		this.teamArray.forEach((eachMatchObj, index) => {
+		// formattedTeamObj = getFormattedTeamObj(this.teamArray[index];)
+			stream.write(
+				`Matchday ${index + 1}` + '\n' + `${JSON.stringify(eachMatchObj)}` + '\n\n'
+			);
+		});
+
+		console.log('done writing to file');
+		stream.end();
+	};
 }
 
 const soccerMatch = new SoccerMatches(process.argv[2]);
@@ -94,5 +110,6 @@ soccerMatch
 		console.log('teamArray: ', soccerMatch.teamArray);
 		console.log('total matches: ', soccerMatch.teamArray.length);
 		console.log('seenNames: ', soccerMatch.seenTeamsNames);
+		soccerMatch.writeMatchDay();
 	})
 	.catch((error) => console.log('error: ', error));

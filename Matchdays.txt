@@ -1,0 +1,12 @@
+Matchday 1
+[{"teamName":"Capitola Seahorses","teamScore":3},{"teamName":"Felton Lumberjacks","teamScore":3},{"teamName":"San Jose Earthquakes","teamScore":1},{"teamName":"Santa Cruz Slugs","teamScore":1},{"teamName":"Aptos FC","teamScore":0},{"teamName":"Monterey United","teamScore":0}]
+
+Matchday 2
+[{"teamName":"Capitola Seahorses","teamScore":4},{"teamName":"Aptos FC","teamScore":3},{"teamName":"Felton Lumberjacks","teamScore":3},{"teamName":"Monterey United","teamScore":3},{"teamName":"Santa Cruz Slugs","teamScore":2},{"teamName":"San Jose Earthquakes","teamScore":1}]
+
+Matchday 3
+[{"teamName":"Aptos FC","teamScore":6},{"teamName":"Felton Lumberjacks","teamScore":6},{"teamName":"Monterey United","teamScore":6},{"teamName":"Capitola Seahorses","teamScore":4},{"teamName":"Santa Cruz Slugs","teamScore":2},{"teamName":"San Jose Earthquakes","teamScore":1}]
+
+Matchday 4
+[{"teamName":"Aptos FC","teamScore":9},{"teamName":"Felton Lumberjacks","teamScore":7},{"teamName":"Monterey United","teamScore":6},{"teamName":"Capitola Seahorses","teamScore":5},{"teamName":"Santa Cruz Slugs","teamScore":3},{"teamName":"San Jose Earthquakes","teamScore":2}]
+
