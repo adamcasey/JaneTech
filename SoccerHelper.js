@@ -1,5 +1,4 @@
 const cloneDeep = require('lodash/cloneDeep');
-const _ = require('lodash');
 
 getScore = (line) => {
 	return parseInt(line);
@@ -43,16 +42,8 @@ getWinnerAndScore = (teamArray, regDigit) => {
 	}
 };
 
-newCheckSeenTeam = (winningTeam, seenTeamsNames) => {
-	return seenTeamsNames.indexOf(winningTeam) > -1;
-};
-
 checkSeenTeam = (teamName, seenTeams) => {
-	// console.log('checkSeenTeam winning teamName: ', teamName);
-	// console.log('seenTeams: ', seenTeams);
-	// if (seenTeams[teamName]) {
 	if (seenTeams.hasOwnProperty(teamName)) {
-		// console.log('seen this team: ', teamName);
 		return true;
 	}
 	return false;
@@ -83,14 +74,14 @@ getSortedTeamObj = (teamObj) => {
 	});
 };
 
+// Modifies the seenClone obj by reference so no need to clone again
 getPreviousScores = (seenClone, teamArray) => {
-	console.log('teamArray: ', teamArray);
+	// No previous scores to accrue
 	if (teamArray.length < 1) return seenClone;
-	console.log('seenClone: ', seenClone);
-	teamArray[teamArray.length - 1].forEach((prevTeam) => {
-		console.log('prevTeam: ', prevTeam);
-		const currentScore = seenClone[prevTeam.teamName];
-		seenClone[prevTeam.teamName] = currentScore + prevTeam.teamScore;
+
+	return teamArray[teamArray.length - 1].forEach((prevTeam) => {
+		// const currentScore = seenClone[prevTeam.teamName];
+		seenClone[prevTeam.teamName] += prevTeam.teamScore;
 	});
 };
 
@@ -102,15 +93,16 @@ handleSeenTeam = (
 	teamArray,
 	seenTeamNames
 ) => {
-	// console.log('handling seen team: ', winningTeam);
+
 	const seenTeamsClone = cloneDeep(seenTeams);
-	const prevSeenTeams = getPreviousScores(seenTeamsClone, teamArray);
-	// const sortedSeenTeams = getSortedTeamObj(prevSeenTeams);
+
+	getPreviousScores(seenTeamsClone, teamArray);
+	
 	const sortedSeenTeams = getSortedTeamObj(seenTeamsClone);
 	teamArray.push(sortedSeenTeams);
 	getNewSeenTeamsObj(seenTeams);
 	seenTeamNames = [];
-	// console.log('seenTeams reaassigned: ', seenTeams);
+	
 	if (scoreToAdd === 3) {
 		seenTeams[winningTeam] = 3;
 		seenTeams[losingTeam] = 0;
@@ -133,14 +125,12 @@ handleUnseenTeam = (winningTeam, losingTeam, scoreToAdd, seenTeams) => {
 	return seenTeams;
 };
 
-// module.exports = { add, subtract, num, getScore, getTeams, getTeamName };
 module.exports = {
 	getScore,
 	getTeams,
 	getTeamName,
 	getWinnerAndScore,
 	checkSeenTeam,
-	newCheckSeenTeam,
 	handleSeenTeam,
 	handleUnseenTeam,
 	getSortedTeamObj,
