@@ -44,6 +44,7 @@ getWinnerAndScore = (teamArray, regDigit) => {
 			tie: true,
 		};
 	}
+	return null;
 };
 
 checkSeenTeam = (teamName, seenTeams) => {
@@ -90,7 +91,7 @@ handleSeenTeam = (
 	losingTeam,
 	seenTeams,
 	scoreToAdd,
-	teamArray,
+	teamArray
 ) => {
 	const seenTeamsClone = cloneDeep(seenTeams);
 
@@ -130,15 +131,19 @@ teamSubArray:  [
 ]
 */
 getFormattedTeamObj = (teamSubArray) => {
-	
-	const formattedTeams = teamSubArray.map(eachTeamArray => {
+	const formattedTeams = teamSubArray.map((eachTeamArray) => {
 		return `${eachTeamArray[0]}, ${eachTeamArray[1]} pts `;
-	})
+	});
 
-	return formattedTeams
+	return formattedTeams;
 };
 
+function sum(a, b) {
+	return a + b;
+}
+
 module.exports = {
+	sum,
 	getScore,
 	getTeams,
 	getTeamName,

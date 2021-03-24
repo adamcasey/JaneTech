@@ -1,7 +1,7 @@
 // Simple Addition Function in Javascript
 const fs = require('fs');
 const readline = require('readline');
-const soccerHelpers = require('./SoccerHelper');
+const soccerHelpers = require('./soccerHelper');
 
 class SoccerMatches {
 	constructor(inputFile, outputFile) {
