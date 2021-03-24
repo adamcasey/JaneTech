@@ -1,4 +1,3 @@
-// Simple Addition Function in Javascript
 const fs = require('fs');
 const readline = require('readline');
 const soccerHelpers = require('./soccerHelper');
@@ -6,7 +5,7 @@ const soccerHelpers = require('./soccerHelper');
 class SoccerMatches {
 	constructor(inputFile, outputFile) {
 		this.inputFile = inputFile;
-		this.outputFile = outputFile
+		this.outputFile = outputFile;
 		this.teamArray = [];
 		this.seenTeams = {};
 	}
@@ -28,7 +27,14 @@ class SoccerMatches {
 				})
 				.split('\n');
 
-			for (const line of data) {
+			const readInterface = readline.createInterface({
+				input: fs.createReadStream(this.fileToRead),
+				crlfDelay: Infinity,
+				console: false,
+			});
+
+			// for (const line of data) {
+			for await (const line of readInterface) {
 				try {
 					if (line.length) {
 						const splitTeams = soccerHelpers.getTeams(line);
@@ -38,20 +44,23 @@ class SoccerMatches {
 							tie,
 						} = soccerHelpers.getWinnerAndScore(splitTeams, this.regDigit);
 
-						soccerHelpers.checkSeenTeam(winningTeam, this.seenTeams)
-							? handleSeenTeam(
-									winningTeam,
-									losingTeam,
-									this.seenTeams,
-									tie ? 1 : 3,
-									this.teamArray,
-							  )
-							: handleUnseenTeam(
-									winningTeam,
-									losingTeam,
-									tie ? 1 : 3,
-									this.seenTeams
-							  );
+						if (soccerHelpers.checkSeenTeam(winningTeam, this.seenTeams)) {
+							handleSeenTeam(
+								winningTeam,
+								losingTeam,
+								this.seenTeams,
+								tie ? 1 : 3,
+								this.teamArray
+							);
+							this.writeMatchDay()
+						} else {
+							handleUnseenTeam(
+								winningTeam,
+								losingTeam,
+								tie ? 1 : 3,
+								this.seenTeams
+							);
+						}
 					}
 				} catch (error) {
 					console.log('Error getting winner: ', error);
@@ -62,6 +71,7 @@ class SoccerMatches {
 			getPreviousScores(this.seenTeams, this.teamArray);
 			const sortedFinalTeam = getSortedTeamObj(this.seenTeams);
 			this.teamArray.push(sortedFinalTeam);
+			this.writeMatchDay()
 
 			return 1;
 		} catch (err) {
@@ -70,7 +80,6 @@ class SoccerMatches {
 	};
 
 	writeMatchDay = () => {
-
 		const stream = fs.createWriteStream(this.outputFile, { flags: 'a' });
 
 		const numTeamsToShow = getNumTeamsToShow(this.teamArray);
@@ -79,11 +88,14 @@ class SoccerMatches {
 			const teamSubArray = eachMatchObj.slice(0, numTeamsToShow + 1);
 			const formattedTeamObj = getFormattedTeamObj(teamSubArray);
 
-			stream.write(`Matchday ${index + 1}` + '\n');
+			console.log(`Matchday ${index + 1}`);
+			// stream.write(`Matchday ${index + 1}` + '\n');
 			formattedTeamObj.forEach((eachTeam) => {
-				stream.write(`${eachTeam}` + '\n');
+				// stream.write(`${eachTeam}` + '\n');
+				console.log(`${eachTeam}`);
 			});
-			stream.write('\n');
+			// stream.write('\n');
+			console.log('\n');
 		});
 
 		console.log('Done writing to file');
@@ -98,6 +110,6 @@ soccerMatch
 		// console.log('teamArray: ', soccerMatch.teamArray);
 		// console.log('total matches: ', soccerMatch.teamArray.length);
 		// console.log('seenNames: ', soccerMatch.seenTeamsNames);
-		soccerMatch.writeMatchDay();
+		// soccerMatch.writeMatchDay();
 	})
 	.catch((error) => console.log('error: ', error));
