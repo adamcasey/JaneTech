@@ -3,9 +3,8 @@ const readline = require('readline');
 const soccerHelpers = require('./soccerHelper');
 
 class SoccerMatches {
-	constructor(inputFile, outputFile) {
+	constructor(inputFile) {
 		this.inputFile = inputFile;
-		this.outputFile = outputFile;
 		this.teamArray = [];
 		this.seenTeams = {};
 	}
@@ -38,6 +37,10 @@ class SoccerMatches {
 				try {
 					if (line.length) {
 						const splitTeams = soccerHelpers.getTeams(line);
+						if (!splitTeams) {
+							console.log('Could not determine teams');
+							return
+						}
 						const {
 							winningTeam,
 							losingTeam,
@@ -52,7 +55,6 @@ class SoccerMatches {
 								tie ? 1 : 3,
 								this.teamArray
 							);
-							this.writeMatchDay()
 						} else {
 							handleUnseenTeam(
 								winningTeam,
@@ -80,7 +82,6 @@ class SoccerMatches {
 	};
 
 	writeMatchDay = () => {
-		const stream = fs.createWriteStream(this.outputFile, { flags: 'a' });
 
 		const numTeamsToShow = getNumTeamsToShow(this.teamArray);
 
@@ -89,27 +90,18 @@ class SoccerMatches {
 			const formattedTeamObj = getFormattedTeamObj(teamSubArray);
 
 			console.log(`Matchday ${index + 1}`);
-			// stream.write(`Matchday ${index + 1}` + '\n');
 			formattedTeamObj.forEach((eachTeam) => {
-				// stream.write(`${eachTeam}` + '\n');
 				console.log(`${eachTeam}`);
 			});
-			// stream.write('\n');
 			console.log('\n');
 		});
-
-		console.log('Done writing to file');
-		stream.end();
 	};
 }
 
-const soccerMatch = new SoccerMatches(process.argv[2], process.argv[3]);
+const soccerMatch = new SoccerMatches(process.argv[2]);
 soccerMatch
 	.getMatchDay()
 	.then((res) => {
-		// console.log('teamArray: ', soccerMatch.teamArray);
-		// console.log('total matches: ', soccerMatch.teamArray.length);
-		// console.log('seenNames: ', soccerMatch.seenTeamsNames);
-		// soccerMatch.writeMatchDay();
+		// Do nothing
 	})
 	.catch((error) => console.log('error: ', error));

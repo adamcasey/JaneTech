@@ -5,7 +5,9 @@ getScore = (line) => {
 };
 
 getTeams = (line) => {
-	return line.split(',');
+	if (line.indexOf(',') > -1)
+		return line.split(',');
+	return null
 };
 
 getTeamName = (team) => {
