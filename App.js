@@ -19,12 +19,6 @@ class SoccerMatches {
 
 	getMatchDay = async () => {
 		try {
-			const data = fs
-				.readFileSync(this.fileToRead, {
-					encoding: 'utf8',
-					flag: 'r',
-				})
-				.split('\n');
 
 			const readInterface = readline.createInterface({
 				input: fs.createReadStream(this.fileToRead),
@@ -32,14 +26,13 @@ class SoccerMatches {
 				console: false,
 			});
 
-			// for (const line of data) {
 			for await (const line of readInterface) {
 				try {
 					if (line.length) {
 						const splitTeams = soccerHelpers.getTeams(line);
 						if (!splitTeams) {
 							console.log('Could not determine teams');
-							return
+							return;
 						}
 						const {
 							winningTeam,
@@ -73,7 +66,7 @@ class SoccerMatches {
 			getPreviousScores(this.seenTeams, this.teamArray);
 			const sortedFinalTeam = getSortedTeamObj(this.seenTeams);
 			this.teamArray.push(sortedFinalTeam);
-			this.writeMatchDay()
+			this.writeMatchDay();
 
 			return 1;
 		} catch (err) {
@@ -82,7 +75,6 @@ class SoccerMatches {
 	};
 
 	writeMatchDay = () => {
-
 		const numTeamsToShow = getNumTeamsToShow(this.teamArray);
 
 		this.teamArray.forEach((eachMatchObj, index) => {
@@ -98,10 +90,19 @@ class SoccerMatches {
 	};
 }
 
-const soccerMatch = new SoccerMatches(process.argv[2]);
-soccerMatch
-	.getMatchDay()
-	.then((res) => {
-		// Do nothing
-	})
-	.catch((error) => console.log('error: ', error));
+try {
+
+	if (!fs.existsSync(process.argv[2])) return console.log('Missing input file');
+
+	const inputFile = process.argv[2];
+
+	const soccerMatch = new SoccerMatches(inputFile);
+	soccerMatch
+		.getMatchDay()
+		.then((res) => {
+			// Do nothing
+		})
+		.catch((error) => console.log('error: ', error));
+} catch (error) {
+	console.log('Error: ', error);
+}

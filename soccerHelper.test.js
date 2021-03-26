@@ -2,8 +2,17 @@ const soccerHelper = require('./soccerHelper');
 
 test('finds seen team name in object of seen teams', () => {
 	expect(
-		soccerHelper.checkSeenTeam('adam', { 'adam': 'casey', 'runs': 'a lot' })
-	).toBe(true);
+		soccerHelper.checkSeenTeam('San Jose Earthquakes', {
+			'San Jose Earthquakes': '2',
+			'Monterey United': '0',
+		})
+	).toBeTruthy();
+	expect(
+		soccerHelper.checkSeenTeam('Aptos FC', {
+			'San Jose Earthquakes': '2',
+			'Monterey United': '0',
+		})
+	).toBeFalsy();
 });
 
 test('gets correct number of top teams to write', () => {
@@ -32,16 +41,37 @@ test('gets correct number of top teams to write', () => {
 });
 
 test('gets team name', () => {
-	const teamName = soccerHelper.getTeamName('Capitola Seahorses 1');
-	expect('Capitola Seahorses').toEqual(expect.stringContaining(teamName));
+	const teamNameOne = soccerHelper.getTeamName('Capitola Seahorses 1');
+	expect('Capitola Seahorses').toEqual(expect.stringContaining(teamNameOne));
+	const teamNameTwo = soccerHelper.getTeamName(' 1');
+	expect('').toEqual(expect.stringContaining(teamNameTwo));
 });
 
 test('gets both teams', () => {
-  expect(soccerHelper.getTeams('Capitola Seahorses 5, San Jose Earthquakes 5')).toHaveLength(2);
-  expect(soccerHelper.getTeams('Felton Lumberjacks 1 San Jose Earthquakes 5')).toBeNull();
-})
+	expect(
+		soccerHelper.getTeams('Capitola Seahorses 5, San Jose Earthquakes 5')
+	).toHaveLength(2);
+	expect(
+		soccerHelper.getTeams('Felton Lumberjacks 1 San Jose Earthquakes 5')
+	).toBeNull();
+});
 
-test('returns score for a team', () => {
+test('gets sorted teams', () => {
+	const sortedMatchOne = soccerHelper.getSortedTeamObj({
+		'Aptos FC': 3,
+		'Felton Lumberjacks': 1,
+	});
+	expect(sortedMatchOne[0]).toContain('Aptos FC');
+	expect(sortedMatchOne[1]).toContain('Felton Lumberjacks');
+	const sortedMatchTwo = soccerHelper.getSortedTeamObj({
+		'San Jose Earthquakes': 3,
+		'Santa Cruz Slugs': 3,
+	});
+	expect(sortedMatchTwo[0]).toContain('San Jose Earthquakes');
+	expect(sortedMatchTwo[1]).toContain('Santa Cruz Slugs');
+});
+
+test('gets winner, loser, and score for a match', () => {
 	const reqDigit = /\d+/;
 	const getTieResponse = soccerHelper.getWinnerAndScore(
 		['San Jose Earthquakes 3', 'Santa Cruz Slugs 3'],
