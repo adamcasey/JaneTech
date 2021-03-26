@@ -1,11 +1,9 @@
 const cloneDeep = require('lodash/cloneDeep');
 
-getScore = (line) => {
-	return parseInt(line);
-};
-
 getTeams = (line) => {
-	return line.split(',');
+	if (line.indexOf(',') > -1)
+		return line.split(',');
+	return null
 };
 
 getTeamName = (team) => {
@@ -65,7 +63,7 @@ getSortedTeamObj = (teamObj) => {
 		return [eachTeam[0], eachTeam[1]];
 	});
 
-	return tempTeamArray.sort(function (vote1, vote2) {
+	const sortedArray = tempTeamArray.sort(function (vote1, vote2) {
 		// Sort by score
 		if (vote1[1] > vote2[1]) return -1;
 		if (vote1[1] < vote2[1]) return 1;
@@ -74,6 +72,7 @@ getSortedTeamObj = (teamObj) => {
 		if (vote1[0] > vote2[0]) return 1;
 		if (vote1[0] < vote2[0]) return -1;
 	});
+	return sortedArray
 };
 
 // Modifies the seenClone obj by reference so no need to clone again
@@ -143,8 +142,6 @@ function sum(a, b) {
 }
 
 module.exports = {
-	sum,
-	getScore,
 	getTeams,
 	getTeamName,
 	getWinnerAndScore,

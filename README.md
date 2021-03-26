@@ -1,7 +1,10 @@
 # JaneTech
 
---To run:
-node App.js <input_filename> <output_filename>
+- Adam Casey's submission to Jane Tech as a Junior Full-Stack Developer
 
---To test:
+**To run**:
+$ node App.js <input_filename>
+
+**To test**:
+$ jest
 

@@ -1,23 +1,23 @@
 {
-  "name": "janetech",
-  "version": "1.0.0",
-  "description": "take home interview coding challenge for Jane Tech",
-  "main": "App.js",
-  "scripts": {
-    "test": "jest --runInBand"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/adamcasey/JaneTech.git"
-  },
-  "author": "adam casey",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/adamcasey/JaneTech/issues"
-  },
-  "homepage": "https://github.com/adamcasey/JaneTech#readme",
-  "devDependencies": {
-    "jest": "^26.6.3",
-    "lodash": "^4.17.21"
-  }
+	"name": "janetech",
+	"version": "1.0.0",
+	"description": "take home interview coding challenge for Jane Tech",
+	"main": "App.js",
+	"scripts": {
+		"test": "jest --runInBand"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/adamcasey/JaneTech.git"
+	},
+	"author": "adam casey",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/adamcasey/JaneTech/issues"
+	},
+	"homepage": "https://github.com/adamcasey/JaneTech#readme",
+	"devDependencies": {
+		"jest": "^26.6.3",
+		"lodash": "^4.17.21"
+	}
 }
