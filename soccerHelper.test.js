@@ -1,4 +1,4 @@
-const soccerHelper = require('./soccerHelper');
+const soccerHelper = require('./soccerHelperUtil');
 
 test('finds seen team name in object of seen teams', () => {
 	expect(
