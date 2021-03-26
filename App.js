@@ -1,6 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
-const soccerHelpers = require('./soccerHelper');
+const soccerHelpers = require('./soccerHelperUtil');
 
 class SoccerMatches {
 	constructor(inputFile) {
